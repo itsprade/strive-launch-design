@@ -1,12 +1,14 @@
 "use client";
 
 import { motion, MotionProps } from "framer-motion";
-import { HTMLAttributes } from "react";
+import { ReactNode } from "react";
 import { fadeInUp } from "@/lib/animations";
 
-interface AnimatedDivProps extends HTMLAttributes<HTMLDivElement> {
+interface AnimatedDivProps {
+  children: ReactNode;
   animation?: MotionProps["variants"];
   delay?: number;
+  className?: string;
 }
 
 export function AnimatedDiv({
@@ -14,7 +16,6 @@ export function AnimatedDiv({
   animation = fadeInUp,
   delay = 0,
   className,
-  ...props
 }: AnimatedDivProps) {
   return (
     <motion.div
@@ -23,7 +24,6 @@ export function AnimatedDiv({
       variants={animation}
       transition={{ delay }}
       className={className}
-      {...props}
     >
       {children}
     </motion.div>

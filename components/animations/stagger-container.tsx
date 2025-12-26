@@ -1,18 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HTMLAttributes } from "react";
+import { ReactNode } from "react";
 import { staggerContainer } from "@/lib/animations";
 
-interface StaggerContainerProps extends HTMLAttributes<HTMLDivElement> {
+interface StaggerContainerProps {
+  children: ReactNode;
   delay?: number;
+  className?: string;
 }
 
 export function StaggerContainer({
   children,
   delay = 0,
   className,
-  ...props
 }: StaggerContainerProps) {
   return (
     <motion.div
@@ -21,7 +22,6 @@ export function StaggerContainer({
       variants={staggerContainer}
       transition={{ delay }}
       className={className}
-      {...props}
     >
       {children}
     </motion.div>
