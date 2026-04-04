@@ -53,10 +53,10 @@ export function OnboardingComposer({
   const fileRef = useRef<HTMLInputElement>(null);
   const recRef = useRef<SpeechRecognitionInstance | null>(null);
 
-  const speechSupported =
-    typeof window !== "undefined" && !!getSpeechRecognitionCtor();
+  const [speechSupported, setSpeechSupported] = useState(false);
 
   useEffect(() => {
+    setSpeechSupported(!!getSpeechRecognitionCtor());
     return () => {
       recRef.current?.stop();
       recRef.current = null;
