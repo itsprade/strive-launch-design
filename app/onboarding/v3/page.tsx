@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { StriveLogoMark } from "@/components/strive-logo-mark";
@@ -462,7 +462,7 @@ export default function OnboardingV3Page() {
   const placeholder =
     flow === "askWebsite"
       ? V3_URL_PLACEHOLDER
-      : "Add context about your team, tools, or challenges…";
+      : "Share context…";
 
   const panelProps = {
     active: rightInsightsActive,
@@ -491,11 +491,11 @@ export default function OnboardingV3Page() {
       <div className="relative z-10 flex h-dvh max-h-dvh min-h-0 flex-col overflow-x-hidden overflow-y-visible px-5 sm:px-8 lg:h-full lg:min-h-0 lg:max-h-dvh lg:px-10 lg:pb-5 lg:pt-3 xl:px-14">
         <div
           className={cn(
-            "relative mx-auto flex min-h-0 w-full max-w-[1020px] flex-1 flex-col gap-6 overflow-x-hidden py-8 pb-10 transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:h-full lg:max-h-full lg:min-h-0 lg:flex-row lg:items-stretch lg:justify-start lg:gap-[100px] lg:overflow-y-hidden lg:py-10",
+            "relative mx-auto flex min-h-0 w-full max-w-[1020px] flex-1 flex-col gap-6 overflow-visible py-8 pb-10 transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:h-full lg:max-h-full lg:min-h-0 lg:flex-row lg:items-stretch lg:justify-start lg:gap-[100px] lg:py-10",
           )}
         >
-          <div className="order-1 flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-hidden lg:order-1 lg:h-full lg:max-h-full lg:min-h-0 lg:w-[460px] lg:max-w-[460px] lg:flex-none lg:shrink-0 lg:items-stretch lg:text-left">
-            <header className="sticky top-0 z-20 shrink-0 border-b border-transparent bg-background/95 pb-4 pt-2 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 lg:static lg:z-auto lg:border-b-0 lg:bg-transparent lg:pb-4 lg:pt-0 lg:backdrop-blur-none">
+          <div className="order-1 flex h-full min-h-0 w-full min-w-0 max-h-full flex-1 flex-col overflow-visible lg:order-1 lg:h-full lg:max-h-full lg:min-h-0 lg:w-[460px] lg:max-w-[460px] lg:flex-none lg:shrink-0 lg:items-stretch lg:text-left">
+            <header className="z-20 shrink-0 border-b border-transparent bg-background/95 pb-4 pt-2 lg:border-b-0 lg:bg-transparent lg:pb-4 lg:pt-0">
               <StriveLogoMark className="mb-4 block" />
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
@@ -509,9 +509,10 @@ export default function OnboardingV3Page() {
                 <button
                   type="button"
                   onClick={resetOnboarding}
-                  className="shrink-0 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-muted/60"
+                  aria-label="Start again"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-muted/60"
                 >
-                  Start again
+                  <RotateCcw className="h-3.5 w-3.5" />
                 </button>
               </div>
             </header>
@@ -519,9 +520,9 @@ export default function OnboardingV3Page() {
             <div
               ref={messagesScrollRef}
               onScroll={updateChatStickFromScroll}
-              className="no-scrollbar flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-y-auto overscroll-y-contain"
+              className="no-scrollbar flex h-0 min-h-0 w-full min-w-0 flex-1 basis-0 flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain pr-1"
             >
-              <div className="flex min-h-full w-full flex-col justify-end gap-4 py-2 pb-6">
+              <div className="flex w-full flex-col gap-4 py-2 pb-6">
                 {messages
                   .filter((m) => !m.belowToolsCard)
                   .map((m) =>
@@ -553,7 +554,7 @@ export default function OnboardingV3Page() {
                         animate={{ opacity: 1, y: 0 }}
                         className="mr-auto max-w-[92%]"
                       >
-                        <div className="rounded-2xl border-[0.5px] border-black/10 bg-white px-4 py-3 text-left text-foreground dark:bg-white">
+                        <div className="rounded-2xl bg-[#F7F7F8] px-4 py-3 text-left text-foreground shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-muted/30">
                           <p className="min-h-[1.35em] font-fraunces text-[15px] leading-relaxed md:text-base">
                             <TypewriterText
                               text={m.text}
@@ -677,7 +678,7 @@ export default function OnboardingV3Page() {
                             animate={{ opacity: 1, y: 0 }}
                             className="mr-auto max-w-[92%]"
                           >
-                            <div className="rounded-2xl border-[0.5px] border-black/10 bg-white px-4 py-3 text-left text-foreground dark:bg-white">
+                            <div className="rounded-2xl bg-[#F7F7F8] px-4 py-3 text-left text-foreground shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-muted/30">
                               <p className="min-h-[1.35em] font-fraunces text-[15px] leading-relaxed md:text-base">
                                 <TypewriterText
                                   text={m.text}
@@ -714,7 +715,7 @@ export default function OnboardingV3Page() {
               </div>
             </div>
 
-            <div className="sticky bottom-0 z-20 min-w-0 shrink-0 border-t border-transparent bg-background/95 py-4 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 lg:static lg:z-auto lg:border-t-0 lg:bg-transparent lg:backdrop-blur-none">
+            <div className="z-20 min-w-0 shrink-0 border-t border-transparent bg-background/95 py-4 lg:border-t-0 lg:bg-transparent">
               <OnboardingComposer
                 placeholder={placeholder}
                 disabled={composerDisabled}
@@ -723,7 +724,15 @@ export default function OnboardingV3Page() {
             </div>
           </div>
 
-          <div className="order-2 flex min-h-0 w-full min-w-0 shrink-0 flex-col overflow-x-hidden overflow-y-visible lg:order-2 lg:h-full lg:max-h-full lg:min-h-0 lg:w-[460px] lg:max-w-[460px] lg:shrink-0 min-h-[min(240px,40dvh)]">
+          <div
+            className="order-2 flex min-h-[42dvh] w-full min-w-0 flex-none flex-col overflow-hidden lg:order-2 lg:h-full lg:min-h-0 lg:max-h-full lg:w-[460px] lg:max-w-[460px] lg:flex-none lg:shrink-0"
+            style={{
+              maskImage:
+                "linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%)",
+            }}
+          >
             {flow === "askWebsite" ? (
               <OnboardingV3PreviewEmpty />
             ) : (
@@ -737,7 +746,7 @@ export default function OnboardingV3Page() {
                   damping: 30,
                   delay: 0.04,
                 }}
-                className="flex min-h-0 max-h-full w-full min-w-0 flex-1 basis-0 flex-col lg:h-full"
+                className="flex h-full min-h-0 max-h-full w-full min-w-0 flex-1 basis-0 flex-col overflow-hidden lg:h-full lg:min-h-0"
               >
                 <OnboardingV3Preview {...panelProps} />
               </motion.div>

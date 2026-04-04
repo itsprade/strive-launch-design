@@ -105,13 +105,15 @@ function FloatShell({
 }) {
   return (
     <motion.div
-      className="origin-center will-change-transform"
+      className="min-w-0 w-full max-w-full origin-center will-change-transform"
       animate={{
+        rotate: [baseTiltDeg, baseTiltDeg + 1.2, baseTiltDeg],
         y: [0, -4, 0],
-        rotate: [baseTiltDeg, baseTiltDeg + 0.45, baseTiltDeg],
+        scale: [1, 1.012, 1],
+        opacity: [0.96, 1, 0.96],
       }}
       transition={{
-        duration: 5.4,
+        duration: 5.5,
         repeat: Infinity,
         ease: "easeInOut",
       }}
@@ -143,7 +145,8 @@ function AdCardV3({
 
   return (
     <motion.div
-      className="rounded-[20px] bg-white p-6 shadow-xl ring-1 ring-black/[0.06]"
+      data-preview-card="true"
+      className="w-full max-w-full rounded-[20px] bg-white p-6 shadow-xl ring-1 ring-black/[0.06]"
       initial={{ opacity: 0, y: 22 }}
       animate={start ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
       transition={{ duration: 0.5, ease: easeOut }}
@@ -213,7 +216,7 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
   const brandDoneCb = useRef(onBrandTypingDone);
   brandDoneCb.current = onBrandTypingDone;
 
-  const scrollSentinelRef = useRef<HTMLDivElement>(null);
+  const previewScrollRef = useRef<HTMLDivElement>(null);
 
   const toneReady = Boolean(brandTone);
 
@@ -300,17 +303,28 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
   }, [adInsights]);
 
   const adIds = adInsights.map((a) => a.toolId).join(",");
+  const adCardVisibleKeys = Object.entries(adCardVisible)
+    .filter(([, v]) => v)
+    .map(([k]) => k)
+    .join(",");
 
   useEffect(() => {
     if (!active) return;
     const id = window.requestAnimationFrame(() => {
       window.setTimeout(() => {
-        scrollSentinelRef.current?.scrollIntoView({
+        const container = previewScrollRef.current;
+        if (!container) return;
+        const items = container.querySelectorAll<HTMLElement>(
+          "[data-preview-card='true']",
+        );
+        const latest = items[items.length - 1];
+        if (!latest) return;
+        latest.scrollIntoView({
           behavior: "smooth",
-          block: "end",
+          block: "center",
           inline: "nearest",
         });
-      }, 100);
+      }, 250);
     });
     return () => cancelAnimationFrame(id);
   }, [
@@ -319,10 +333,14 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
     companySummary,
     contentInsight,
     adIds,
+    adCardVisibleKeys,
     summaryLoaderDone,
+    summaryTypingDone,
     brandLoaderDone,
+    brandAllowType,
     blogLoaderDone,
     blogLinksVisible,
+    contentStart,
     suppressContextLoadingCard,
     workingLoaderDone,
   ]);
@@ -341,53 +359,57 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
   const summaryMetaDesc = clipMetaText(siteMeta?.description, 220);
 
   const cardWhite =
-    "rounded-[20px] bg-white p-6 shadow-xl ring-1 ring-black/[0.06]";
+    "min-w-0 w-full max-w-full rounded-[20px] bg-white p-6 shadow-xl ring-1 ring-black/[0.06]";
 
   return (
-    <div className="relative flex h-full min-h-0 max-h-full flex-1 flex-col overflow-visible">
+    <div className="relative flex h-full min-h-0 max-h-full flex-1 flex-col overflow-hidden">
       <div
-        className="relative flex min-h-0 max-h-full flex-1 basis-0 flex-col overflow-y-auto overflow-x-clip overscroll-y-contain px-2 py-10 pb-14 [scrollbar-gutter:stable] lg:px-3 lg:py-12 lg:pb-20"
-        style={{
-          scrollPaddingTop: "1.5rem",
-          scrollPaddingBottom: "2rem",
-        }}
+        ref={previewScrollRef}
+        className="no-scrollbar relative flex h-0 min-h-0 max-h-full flex-1 basis-0 flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain px-5 sm:px-6 lg:px-8"
       >
-        <div className="flex flex-col gap-10 pt-4 pb-32">
+        <div className="flex min-h-0 w-full max-w-full flex-col gap-10 px-2 pt-6 pb-[45dvh] sm:px-3 lg:px-4 lg:pt-8">
           {contextLoading &&
           submittedSiteDisplay &&
           !suppressContextLoadingCard ? (
             <>
               {!workingLoaderDone ? (
-                <PreviewLoaderLine
-                  text={PREVIEW_LOADERS.working}
-                  start
-                  onComplete={() => setWorkingLoaderDone(true)}
-                />
+                <div data-preview-card="true">
+                  <PreviewLoaderLine
+                    text={PREVIEW_LOADERS.working}
+                    start
+                    onComplete={() => setWorkingLoaderDone(true)}
+                  />
+                </div>
               ) : null}
               {workingLoaderDone ? (
                 <FloatShell baseTiltDeg={-1}>
-                  <SiteMetaWorkingCard
-                    siteLabel={submittedSiteDisplay}
-                    siteMeta={siteMeta}
-                  />
+                  <div data-preview-card="true">
+                    <SiteMetaWorkingCard
+                      siteLabel={submittedSiteDisplay}
+                      siteMeta={siteMeta}
+                    />
+                  </div>
                 </FloatShell>
               ) : null}
             </>
           ) : null}
 
           {showContextSection && companySummary ? (
-            <section className="flex flex-col gap-6">
+            <section className="flex min-w-0 w-full max-w-full flex-col gap-6">
               {!summaryLoaderDone ? (
-                <PreviewLoaderLine
-                  text={PREVIEW_LOADERS.companySummary}
-                  start
-                  onComplete={() => setSummaryLoaderDone(true)}
-                />
+                <div data-preview-card="true">
+                  <PreviewLoaderLine
+                    text={PREVIEW_LOADERS.companySummary}
+                    start
+                    onComplete={() => setSummaryLoaderDone(true)}
+                  />
+                </div>
               ) : null}
               {summaryLoaderDone ? (
                 <FloatShell baseTiltDeg={-2.2}>
                   <motion.div
-                    className="overflow-hidden rounded-[20px] bg-white shadow-xl ring-1 ring-black/[0.06]"
+                    data-preview-card="true"
+                    className="min-w-0 w-full max-w-full overflow-hidden rounded-[20px] bg-white shadow-xl ring-1 ring-black/[0.06]"
                     initial={{ opacity: 0, y: 28 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.58, ease: easeOut }}
@@ -427,15 +449,18 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
               {summaryLoaderDone &&
               summaryTypingDone &&
               !brandLoaderDone ? (
-                <PreviewLoaderLine
-                  text={PREVIEW_LOADERS.brandTone}
-                  start
-                  onComplete={() => setBrandLoaderDone(true)}
-                />
+                <div data-preview-card="true">
+                  <PreviewLoaderLine
+                    text={PREVIEW_LOADERS.brandTone}
+                    start
+                    onComplete={() => setBrandLoaderDone(true)}
+                  />
+                </div>
               ) : null}
               {brandLoaderDone ? (
                 <FloatShell baseTiltDeg={2}>
                   <motion.div
+                    data-preview-card="true"
                     className={cardWhite}
                     initial={{ opacity: 0, y: 28 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -466,17 +491,20 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
           ) : null}
 
           {showBlogSection && contentInsight ? (
-            <section className="flex flex-col gap-4">
+            <section className="flex min-w-0 w-full max-w-full flex-col gap-4">
               {!blogLoaderDone ? (
-                <PreviewLoaderLine
-                  text={PREVIEW_LOADERS.blog}
-                  start
-                  onComplete={() => setBlogLoaderDone(true)}
-                />
+                <div data-preview-card="true">
+                  <PreviewLoaderLine
+                    text={PREVIEW_LOADERS.blog}
+                    start
+                    onComplete={() => setBlogLoaderDone(true)}
+                  />
+                </div>
               ) : null}
               {blogLoaderDone ? (
                 <FloatShell baseTiltDeg={-1.6}>
                   <motion.div
+                    data-preview-card="true"
                     className={cardWhite}
                     initial={{ opacity: 0, y: 22 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -507,16 +535,18 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
           ) : null}
 
           {adInsights.map((ins, index) => (
-            <section key={ins.toolId} className="flex flex-col gap-4">
+            <section key={ins.toolId} className="flex min-w-0 w-full max-w-full flex-col gap-4">
               {!adCardVisible[ins.toolId] ? (
-                <PreviewLoaderLine
-                  key={ins.toolId}
-                  text={PREVIEW_LOADERS.adInsight(toolLabel(ins.toolId))}
-                  start
-                  onComplete={() =>
-                    setAdCardVisible((p) => ({ ...p, [ins.toolId]: true }))
-                  }
-                />
+                <div data-preview-card="true">
+                  <PreviewLoaderLine
+                    key={ins.toolId}
+                    text={PREVIEW_LOADERS.adInsight(toolLabel(ins.toolId))}
+                    start
+                    onComplete={() =>
+                      setAdCardVisible((p) => ({ ...p, [ins.toolId]: true }))
+                    }
+                  />
+                </div>
               ) : null}
               {adCardVisible[ins.toolId] ? (
                 <FloatShell
@@ -528,11 +558,7 @@ export function OnboardingV3Preview(props: InsightsPanelProps) {
             </section>
           ))}
 
-          <div
-            ref={scrollSentinelRef}
-            className="h-px w-full shrink-0 scroll-mt-6"
-            aria-hidden
-          />
+          <div className="h-px w-full shrink-0 scroll-mt-6" aria-hidden />
         </div>
       </div>
     </div>

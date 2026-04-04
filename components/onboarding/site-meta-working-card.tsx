@@ -88,7 +88,7 @@ export function SiteMetaWorkingCard({
         <SiteMetaHeroImage siteMeta={siteMeta} layout="fill" />
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col justify-center overflow-y-auto overscroll-y-contain bg-white px-5 py-4 text-sm leading-relaxed">
+      <div className="flex min-h-0 flex-1 flex-col justify-center overflow-visible bg-white px-5 py-4 text-sm leading-relaxed">
         {leadSlot ? <div className="mb-3 shrink-0">{leadSlot}</div> : null}
         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-neutral-500">
           {host}

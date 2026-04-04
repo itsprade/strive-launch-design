@@ -144,7 +144,7 @@ export function OnboardingComposer({
 
       <div
         className={cn(
-          "relative flex min-h-[52px] min-w-0 items-center gap-2 rounded-2xl bg-white px-3 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.08)] dark:bg-card",
+          "relative flex min-h-[52px] min-w-0 items-center gap-2 rounded-2xl border-[0.5px] border-black/10 bg-white px-3 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.08)] dark:bg-card",
           disabled && "pointer-events-none opacity-60",
         )}
         onDragOver={(e) => {
