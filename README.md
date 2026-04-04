@@ -47,10 +47,10 @@ Strive Labs helps marketers optimize their campaigns across multiple platforms (
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Run development server
-pnpm dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see the app.

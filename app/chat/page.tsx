@@ -188,33 +188,53 @@ export default function ChatPage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* 🔽 Sidebar Navigation */}
-      <aside className="fixed left-0 top-0 flex h-screen w-16 flex-col items-center justify-center bg-background">
-        <nav className="flex flex-col gap-2">
-          <button
-            onClick={() => router.push("/")}
-            className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-accent transition-colors hover:bg-sidebar-accent/80"
-          >
-            <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
-              <path d="M2 6.5L8 2L14 6.5V13.5C14 14.0523 13.5523 14.5 13 14.5H3C2.44772 14.5 2 14.0523 2 13.5V6.5Z" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
+      {/* 🔽 Sidebar Navigation - compact black bar */}
+      <aside className="fixed left-3 top-3 z-20">
+        <div className="flex flex-col items-center gap-2 rounded-[10px] border border-border/40 bg-[#262626] px-1.5 py-1 shadow-sm">
+          {/* Logo / primary mark */}
+          <button className="flex h-7 w-7 items-center justify-center rounded-lg bg-[rgba(24,24,24,0.1)]">
+            <SparklesIcon className="h-4 w-4 text-amber-400" />
           </button>
-          <button className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-sidebar-accent">
-            <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
-              <circle cx="5.5" cy="5.5" r="3" stroke="currentColor" strokeWidth="1.5"/>
-              <circle cx="10.5" cy="10.5" r="3" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
-          </button>
-          <button className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-sidebar-accent">
-            <SparklesIcon className="h-4 w-4" />
-          </button>
-          <button className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-sidebar-accent">
-            <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M8 5V8L10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </button>
-        </nav>
+
+          {/* Divider */}
+          <div className="h-px w-4 bg-white/10" />
+
+          {/* Navigation icons */}
+          <nav className="flex flex-col items-center gap-1.5">
+            <button
+              onClick={() => router.push("/")}
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-[rgba(24,24,24,0.1)] text-white transition-colors hover:bg-[rgba(24,24,24,0.2)]"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M2 6.5L8 2L14 6.5V13.5C14 14.0523 13.5523 14.5 13 14.5H3C2.44772 14.5 2 14.0523 2 13.5V6.5Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+              </svg>
+            </button>
+            <button className="flex h-7 w-7 items-center justify-center rounded-lg text-white/60 transition-colors hover:text-white hover:bg-[rgba(24,24,24,0.15)]">
+              <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
+                <circle cx="5.5" cy="5.5" r="3" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="10.5" cy="10.5" r="3" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </button>
+            <button className="flex h-7 w-7 items-center justify-center rounded-lg text-white/60 transition-colors hover:text-white hover:bg-[rgba(24,24,24,0.15)]">
+              <SparklesIcon className="h-4 w-4" />
+            </button>
+            <button className="flex h-7 w-7 items-center justify-center rounded-lg text-white/60 transition-colors hover:text-white hover:bg-[rgba(24,24,24,0.15)]">
+              <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
+                <path
+                  d="M8 5V8L10 10"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </nav>
+        </div>
       </aside>
 
       {/* 🔽 Breadcrumb - Fixed at top left */}

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { InsightsPanel } from "@/components/onboarding/insights-panel";
+import { OnboardingV2Preview } from "@/components/onboarding/v2/onboarding-v2-preview";
 import type { ActiveAdInsight } from "@/components/onboarding/insights-panel";
 import { OnboardingComposer } from "@/components/onboarding/onboarding-composer";
 import { fetchBlogPostsForOnboarding } from "@/lib/onboarding-blog-posts-client";
@@ -22,6 +22,8 @@ import {
 } from "@/components/onboarding/constants";
 
 const USER_NAME = "Pradeep Kumar";
+
+const V2_INTRO_PLACEHOLDER = "add more context to strivelabs ai";
 
 type FlowState =
   | "askWebsite"
@@ -64,13 +66,13 @@ function buildBrandTone(host: string): string {
 const CONTENT_INSIGHT_TEXT =
   "A cluster of older blog posts is still capturing branded traffic but hasn’t been refreshed in over 18 months. Updating those URLs while new campaigns ramp could compound paid and organic lift.";
 
-let msgSeq = 0;
+let v2MsgSeq = 0;
 function nextId(): string {
-  msgSeq += 1;
-  return `m-${msgSeq}`;
+  v2MsgSeq += 1;
+  return `v2-m-${v2MsgSeq}`;
 }
 
-export default function OnboardingPage() {
+export default function OnboardingV2Page() {
   const router = useRouter();
   const [flow, setFlow] = useState<FlowState>("askWebsite");
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
@@ -250,7 +252,7 @@ export default function OnboardingPage() {
 
   const placeholder =
     flow === "askWebsite"
-      ? "Enter your company website to get started."
+      ? V2_INTRO_PLACEHOLDER
       : "Add context about your team, tools, or challenges…";
 
   const panelProps = {
@@ -277,17 +279,33 @@ export default function OnboardingPage() {
           "mx-auto flex w-full max-w-[952px] min-h-screen transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
           isCenteredIntro
             ? "flex-col items-center justify-center py-8"
-            : "flex-col pt-8 lg:min-h-screen lg:flex-row lg:items-stretch lg:justify-start lg:gap-8 lg:pt-10",
+            : "flex-col gap-6 pt-8 pb-10 lg:min-h-screen lg:flex-row lg:items-stretch lg:gap-8 lg:pt-10",
         )}
       >
+        {rightInsightsActive ? (
+          <motion.div
+            initial={{ opacity: 0, x: -36 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 280,
+              damping: 30,
+              delay: 0.06,
+            }}
+            className="order-2 flex min-h-[260px] w-full flex-col lg:order-1 lg:h-screen lg:min-h-0 lg:w-[460px] lg:max-w-[460px] lg:shrink-0"
+          >
+            <OnboardingV2Preview {...panelProps} />
+          </motion.div>
+        ) : null}
+
         <motion.div
           layout
           transition={{ type: "spring", stiffness: 320, damping: 32 }}
           className={cn(
             "flex w-full flex-col",
             isCenteredIntro
-              ? "max-w-[460px] items-center text-center"
-              : "min-h-0 lg:h-screen lg:w-[460px] lg:max-w-[460px] lg:shrink-0 lg:items-stretch lg:text-left",
+              ? "order-1 max-w-[460px] items-center text-center"
+              : "order-1 min-h-0 lg:order-2 lg:h-screen lg:w-[460px] lg:max-w-[460px] lg:shrink-0 lg:items-stretch lg:text-left",
           )}
         >
           <header
@@ -324,7 +342,7 @@ export default function OnboardingPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="ml-auto w-full max-w-[92%] flex justify-end"
                   >
-                    <div className="rounded-2xl bg-white px-4 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.04)] text-left dark:bg-card">
+                    <div className="rounded-2xl border border-border/60 bg-white px-4 py-3 text-left shadow-sm dark:bg-card">
                       <p className="text-sm leading-relaxed text-foreground">
                         {m.text}
                       </p>
@@ -454,24 +472,6 @@ export default function OnboardingPage() {
             />
           </div>
         </motion.div>
-
-        {rightInsightsActive ? (
-          <motion.div
-            initial={{ opacity: 0, x: 48 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 280,
-              damping: 30,
-              delay: 0.05,
-            }}
-            className="flex min-h-0 w-full flex-col bg-background lg:h-screen lg:w-[460px] lg:max-w-[460px] lg:shrink-0"
-          >
-            <div className="max-h-[45vh] min-h-0 flex-1 overflow-y-auto py-6 lg:max-h-none lg:py-10">
-              <InsightsPanel {...panelProps} />
-            </div>
-          </motion.div>
-        ) : null}
       </div>
     </div>
   );

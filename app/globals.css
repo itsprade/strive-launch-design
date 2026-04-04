@@ -125,3 +125,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes preview-loader-text-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /** Animated gradient copy for onboarding v3 right-column loaders */
+  .preview-loader-gradient-text {
+    background-image: linear-gradient(
+      105deg,
+      oklch(0.38 0.1 278) 0%,
+      oklch(0.48 0.17 308) 28%,
+      oklch(0.44 0.12 240) 52%,
+      oklch(0.5 0.15 295) 78%,
+      oklch(0.38 0.1 278) 100%
+    );
+    background-size: 240% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: preview-loader-text-shimmer 2.6s ease-in-out infinite;
+  }
+}
